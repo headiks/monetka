@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гадание на монетке</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            height: 100vh; /* Высота экрана */
+            display: flex;
+            justify-content: center; /* Центрирование по горизонтали */
+            align-items: center; /* Центрирование по вертикали */
+            flex-direction: column; /* Вертикальное направление */
+            margin: 0; /* Убираем отступы по умолчанию */
+        }
+        img {
+            width: 200px; /* Фиксированная ширина монетки */
+            height: 200px; /* Фиксированная высота монетки */
+            transition: opacity 0.5s ease; /* Плавная анимация затухания */
+        }
+        #message {
+            margin-top: 20px; /* Отступ сверху для сообщения */
+            font-size: 24px; /* Размер шрифта */
+            display: none; /* Скрываем сообщение изначально */
+            padding: 10px; /* Отступ внутри сообщения */
+            background-color: rgba(255, 255, 255, 0.8); /* Полупрозрачный фон для читаемости */
+            border-radius: 5px; /* Скругленные углы */
+        }
+        button {
+            margin-top: 20px; /* Отступ сверху для кнопки */
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: none; /* Скрываем кнопку изначально */
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Анимация подбрасывания монетки */
+        @keyframes toss {
+            0% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(-100px) rotate(720deg); } /* Подбрасывание и вращение */
+            100% { transform: translateY(0) rotate(0); }
+        }
+    </style>
+</head>
+<body>
+    <img id="coin" src="yes.png" alt="Монетка"> <!-- Изображение монетки YES -->
+    <div id="message"></div> <!-- Сообщение без текста изначально -->
+    <button id="retryBtn">Еще раз</button> <!-- Кнопка для повторной попытки -->
+
+    <script>
+        document.getElementById('coin').addEventListener('click', function() {
+            const coin = document.getElementById('coin');
+            const message = document.getElementById('message');
+            const button = document.getElementById('retryBtn');
+
+            // Заменяем изображение на вопрос во время анимации
+            coin.src = 'question.png'; // Показываем изображение вопроса
+
+            // Запускаем анимацию подбрасывания
+            coin.style.animation = 'toss 1s ease'; 
+
+            // Через 3 секунды показываем результат
+            setTimeout(function() {
+                // Генерируем случайный ответ
+                const result = Math.random() < 0.5 ? 'Да' : 'Нет';
+                message.textContent = result; // Показываем результат
+                message.style.display = 'block'; // Показываем сообщение
+                button.style.display = 'block'; // Показываем кнопку "Еще раз"
+                coin.style.animation = 'none'; // Останавливаем анимацию
+                coin.src = result === 'Да' ? 'yes.png' : 'no.png'; // Меняем изображение монетки
+            }, 3000); // Время ожидания 3 секунды
+        });
+
+        // Обработчик для кнопки "Еще раз"
+        document.getElementById('retryBtn').addEventListener('click', function() {
+            location.reload(); // Перезагрузка страницы для повторного запуска
+        });
+    </script>
+</body>
+</html>
